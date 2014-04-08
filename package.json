@@ -16,7 +16,8 @@
   "devDependencies": {
     "should": "~3.3.0",
     "cake-dog": "~0.3.0",
-    "mocha": "~1.18.2"
+    "mocha": "~1.18.2",
+    "coffee-script": "~1.7.1"
   },
   "dependencies": {
     "lodash": "~2.4.1"
