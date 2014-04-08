@@ -17,5 +17,8 @@
     "should": "~3.3.0",
     "cake-dog": "~0.3.0",
     "mocha": "~1.18.2"
+  },
+  "dependencies": {
+    "lodash": "~2.4.1"
   }
 }
