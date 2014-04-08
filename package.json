@@ -1,0 +1,21 @@
+{
+  "name": "talk-node-sdk",
+  "version": "0.0.0",
+  "main": "./lib/index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "make test"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git@code.teambition.com:talk/talk-sdk-node.git"
+  },
+  "devDependencies": {
+    "should": "~3.3.0",
+    "cake-dog": "~0.3.0",
+    "mocha": "~1.18.2"
+  }
+}
