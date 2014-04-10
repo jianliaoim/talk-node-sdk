@@ -1,4 +1,5 @@
 module.exports =
-  accessKey: 'your access key'
-  secretKey: 'your secret key'
+  clientId: 'your client id'
+  clientSecret: 'your client secret'
+  apiHost: 'https://talk.ai'
   version: 1

@@ -1,20 +1,21 @@
 _ = require 'lodash'
+request = require 'request'
 config = require './config'
+Client = require './client'
+util = require './util'
 
 class Talk
 
   constructor: (options = {}) ->
-    @options = options
+    @init(options)
 
-  auth: (accessKey, secretKey) ->
-    @options.accessKey = accessKey
-    @options.secretKey = secretKey
-    this
+  init: (options) ->
+    @options = _.extend(_.clone(config), options)
+    return this
 
-  # Generate landing url of talk
-  # @params token token of user
-  # @params target
-  landingUrl: (token, room) ->
+  discover: (version = 'v1', callback = ->) ->
+    client = new Client(@options)
+    callback(null, client)
 
 talk = new Talk
 talk.Talk = Talk
