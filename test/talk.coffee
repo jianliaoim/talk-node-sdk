@@ -12,7 +12,6 @@ describe 'Talk#Init', ->
 describe 'Talk#Discover', ->
 
   it 'should get the discovered client', (done) ->
-    talk
     talk.discover 'v1', (err, client) ->
       data.client = client
       client.should.have.properties('oauth')
