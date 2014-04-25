@@ -2,16 +2,16 @@ _ = require 'lodash'
 util = require './util'
 path = require 'path'
 
-map =
-  'oauth.traceToken':
-    method: 'get'
-    path: '/v1/oauth/tracetoken'
-    has: ['traceId']
+# map =
+#   'oauth.traceToken':
+#     method: 'get'
+#     path: '/v1/oauth/tracetoken'
+#     has: ['traceId']
 
 class Client
 
   constructor: (@options) ->
-    {apiHost, clientId, clientSecret} = @options
+    {apiHost, clientId, clientSecret, map} = @options
 
     _.keys(map).forEach (key) =>
 

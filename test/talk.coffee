@@ -16,6 +16,8 @@ describe 'Talk#Discover', ->
       data.client = client
       client.should.have.properties('oauth')
       client.oauth.should.have.properties('traceToken')
+      talk.client.should.not.eql(null)
+      (talk.expire > Date.now()).should.eql(true)
       done()
 
 describe 'Talk#Client', ->
