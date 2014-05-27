@@ -2,12 +2,6 @@ _ = require 'lodash'
 util = require './util'
 path = require 'path'
 
-# map =
-#   'oauth.traceToken':
-#     method: 'get'
-#     path: '/v1/oauth/tracetoken'
-#     has: ['traceId']
-
 class Client
 
   constructor: (@options) ->
@@ -15,10 +9,8 @@ class Client
 
     _.keys(map).forEach (key) =>
 
-      # Define caller object
-      caller = {}
       _map = map[key]
-      caller.exec = (params, callback = ->) ->
+      getter = (params, callback = ->) ->
         params.clientId = clientId
         params.clientSecret = clientSecret
 
@@ -57,10 +49,10 @@ class Client
 
       # Bind keys to caller chains
       keys = key.split('.')
-      if keys.length is 1
-        Object.defineProperty this, key, get: -> caller
+      if keys.length is 1 or keys[1] is 'index'
+        Object.defineProperty this, keys[0], get: -> getter
       else if keys.length is 2
         this[keys[0]] = {} unless this[keys[0]]
-        Object.defineProperty this[keys[0]], keys[1], get: -> caller
+        Object.defineProperty this[keys[0]], keys[1], get: -> getter
 
 module.exports = Client

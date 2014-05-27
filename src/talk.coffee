@@ -24,9 +24,9 @@ class Talk
       uri: apiHost + "/#{version}/discover"
       qs: params
     return callback(null, @client) if @client? and @expire > Date.now()
-    util.request reqOptions, (err, result) =>
+    util.request reqOptions, (err, map) =>
       @expire = Date.now() + 86400000
-      @options.map = result if result?
+      @options.map = map if map?
       @client = new Client(@options)
       callback(err, @client)
 

@@ -14,13 +14,13 @@
     "url": "git@code.teambition.com:talk/talk-sdk-node.git"
   },
   "devDependencies": {
-    "should": "~3.3.0",
-    "cake-dog": "~0.3.0",
-    "mocha": "~1.18.2",
-    "coffee-script": "~1.7.1"
+    "should": "^3.3.2",
+    "cake-dog": "^0.3.0",
+    "coffee-script": "^1.7.1",
+    "mocha": "^1.19.0"
   },
   "dependencies": {
-    "lodash": "~2.4.1",
-    "request": "~2.34.0"
+    "lodash": "^2.4.1",
+    "request": "^2.36.0"
   }
 }
