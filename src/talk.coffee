@@ -30,6 +30,4 @@ class Talk
       @client = new Client(@options)
       callback(err, @client)
 
-talk = new Talk
-talk.Talk = Talk
-module.exports = talk
+module.exports = new Talk
