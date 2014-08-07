@@ -16,7 +16,6 @@
   },
   "devDependencies": {
     "should": "^3.3.2",
-    "cake-dog": "^0.3.0",
     "coffee-script": "^1.7.1",
     "mocha": "^1.19.0"
   },
