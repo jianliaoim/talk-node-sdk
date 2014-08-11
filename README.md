@@ -1,10 +1,13 @@
 Talk-Node-Sdk
 ======
 
-# Apis
+# TODO
 
-* `init` Initialize the sdk
-* `discover` Discover the api list and get the client object
+1. `talk.register` to register for the application
+2. `talk.request` to request for the talk resource
+3. `talk.subscribe` to listen for webhooks
+
+# Apis
 
 # ChangeLog
 

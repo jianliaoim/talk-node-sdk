@@ -1,5 +1,5 @@
 {
-  "name": "talk",
+  "name": "talk-node-sdk",
   "version": "0.1.1",
   "main": "./lib/talk",
   "directories": {
@@ -17,10 +17,10 @@
   "devDependencies": {
     "should": "^3.3.2",
     "coffee-script": "^1.7.1",
-    "mocha": "^1.19.0"
+    "mocha": "^1.21.4"
   },
   "dependencies": {
     "lodash": "^2.4.1",
-    "request": "^2.36.0"
+    "request": "^2.40.0"
   }
 }
