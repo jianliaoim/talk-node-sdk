@@ -1,1 +1,5 @@
-module.exports = {}
+_data = {}
+
+_data.prepare = (callback) ->
+
+module.exports = _data
