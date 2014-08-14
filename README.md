@@ -9,14 +9,19 @@ Talk-Node-Sdk
 
 # Events
 
-* `*` listen to all event
-* `message.create` message create event
+- `*` listen to all event
+- `message.create` message create event
 
 # Apis
 
 # ChangeLog
 
+## 0.2.0
+
+- bump to new version
+
 ## 0.1.1
-* Use methods from `discover` api
-* Add support for 'GET', 'PUT', 'POST', 'DELETE' methods
-* Replace url params with the correct value
+
+- Use methods from `discover` api
+- Add support for 'GET', 'PUT', 'POST', 'DELETE' methods
+- Replace url params with the correct value

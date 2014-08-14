@@ -1,11 +1,19 @@
+http = require 'http'
+
 should = require 'should'
+express = require 'express'
+supertest = require 'supertest'
+
 talk = require '../'
 _config = require './_config'
 _data = require './_data'
 
 describe 'Talk#Main', ->
 
-  describe 'Discover', ->
+  app = express()
+  app.listen(3000)
+
+  describe 'discover', ->
 
     it 'should list the apis from the discover api', (done) ->
 
@@ -14,7 +22,7 @@ describe 'Talk#Main', ->
         apis.should.have.properties 'discover.index'
         done(err)
 
-  describe 'Call', ->
+  describe 'call', ->
 
     _userId = '53be41be138556909068769f'
     token = '5e7f8ead-47fa-4256-9a27-4e2166cfcfac'
@@ -31,3 +39,36 @@ describe 'Talk#Main', ->
       authClient.call 'user.readOne', _id: _userId, (err, user) ->
         user.should.have.properties 'name'
         done err
+
+  describe 'useServer', ->
+
+    it 'should intialize the express server and call the api', (done) ->
+      talk.useServer app
+
+      supertest(app).post('/').end (err, res) ->
+        res.text.should.eql 'PONG'
+        done err
+
+  describe 'on', ->
+
+    it 'should listen for the user.readOne event', (done) ->
+
+      talk.once 'user.readOne', (data) ->
+        data.should.have.properties 'user'
+        done()
+
+      supertest(app).post('/')
+        .set "Content-Type": "application/json"
+        .send JSON.stringify(event: 'user.readOne', user: 'ok')
+        .end(->)
+
+    it 'should listen for the wildcard * event', (done) ->
+
+      talk.once '*', (data) ->
+        data.should.have.properties 'user'
+        done()
+
+      supertest(app).post '/'
+        .set "Content-Type": "application/json"
+        .send JSON.stringify(event: 'user.readOne', user: 'ok')
+        .end(->)
