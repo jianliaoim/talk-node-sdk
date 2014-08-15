@@ -11,14 +11,14 @@ _data = require './_data'
 describe 'Talk#Main', ->
 
   app = express()
-  app.listen(3000)
+  app.listen 3000
 
   describe 'discover', ->
 
     it 'should list the apis from the discover api', (done) ->
 
       talk.init(_config).discover (err, apis) ->
-        (Object.keys(apis).length > 10).should.eql true
+        (Object.keys(apis).length > 1).should.eql true
         apis.should.have.properties 'discover.index'
         done(err)
 
