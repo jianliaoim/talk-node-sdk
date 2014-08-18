@@ -48,8 +48,6 @@ class Client
     params.clientId = config.clientId
     params.clientSecret = config.clientSecret
 
-    console.log url, method, params
-
     util.request url, method, params, callback
 
 module.exports = Client

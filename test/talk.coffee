@@ -54,21 +54,21 @@ describe 'Talk#Main', ->
     it 'should listen for the user.readOne event', (done) ->
 
       talk.once 'user.readOne', (data) ->
-        data.should.have.properties 'user'
+        data.should.eql 'ok'
         done()
 
       supertest(app).post('/')
         .set "Content-Type": "application/json"
-        .send JSON.stringify(event: 'user.readOne', user: 'ok')
+        .send JSON.stringify(event: 'user.readOne', data: 'ok')
         .end(->)
 
     it 'should listen for the wildcard * event', (done) ->
 
       talk.once '*', (data) ->
-        data.should.have.properties 'user'
+        data.should.eql 'ok'
         done()
 
       supertest(app).post '/'
         .set "Content-Type": "application/json"
-        .send JSON.stringify(event: 'user.readOne', user: 'ok')
+        .send JSON.stringify(event: 'user.readOne', data: 'ok')
         .end(->)
