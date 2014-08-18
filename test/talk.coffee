@@ -40,10 +40,10 @@ describe 'Talk#Main', ->
         user.should.have.properties 'name'
         done err
 
-  describe 'useServer', ->
+  describe 'server', ->
 
     it 'should intialize the express server and call the api', (done) ->
-      talk.useServer app
+      talk.server app
 
       supertest(app).post('/').end (err, res) ->
         res.text.should.eql 'PONG'

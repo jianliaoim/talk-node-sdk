@@ -1,6 +1,26 @@
 Talk-Node-Sdk
 ======
 
+# Usage
+
+```coffeescript
+talk = require 'talk-node-sdk'
+app = express()
+
+config =
+  clientId: 'xxxxxxx-eeee-11e3-9a30-337b04324e79'
+  clientSecret: 'yyyyyy-ffff-gggg-hhhh-aaaaaaaaaaa'
+  apiHost: 'http://localhost:7001'
+
+token = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+
+talk.init(config).server(app).auth(token).discover()
+
+# Use another client
+client = talk.client(token)
+
+```
+
 # TODO
 
 1. `talk.register` to register for the application
