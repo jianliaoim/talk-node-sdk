@@ -42,6 +42,8 @@ class Client
 
     # Add authorization info
     params.token = @token if @token
+    params.clientId = config.clientId
+    params.clientSecret = config.clientSecret
 
     util.request url, method, params, callback
 
