@@ -35,15 +35,20 @@ class Client
 
     {path, method} = apis[api]
 
-    url = config.apiHost + path.replace /\:(.*)?\/?/i, (m1, m2) ->
-      _m2 = params[m2]
-      delete params[m2]
-      return _m2
+    url = config.apiHost + path.split('/').map((k)->
+      return k unless k[0] is ':'
+      k = k[1..]
+      _k = params[k]
+      delete params[k]
+      return _k
+      ).join('/')
 
     # Add authorization info
     params.token = @token if @token
     params.clientId = config.clientId
     params.clientSecret = config.clientSecret
+
+    console.log url, method, params
 
     util.request url, method, params, callback
 
