@@ -4,7 +4,7 @@ should = require 'should'
 express = require 'express'
 supertest = require 'supertest'
 
-talk = require '../'
+talk = require '../src/talk'
 _config = require './_config'
 _data = require './_data'
 

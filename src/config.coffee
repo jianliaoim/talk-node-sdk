@@ -1,4 +1,3 @@
 module.exports =
-  clientId: 'your client id'
-  clientSecret: 'your client secret'
+  appToken: 'your application token'
   apiHost: 'https://talk.ai'
