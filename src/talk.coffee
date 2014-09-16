@@ -3,24 +3,15 @@
 _ = require 'lodash'
 
 config = require './config'
-server = require './server'
 Client = require './client'
+Service = require './service'
 
 class Talk extends EventEmitter
 
-  constructor: ->
-    @_client = new Client
+  constructor: -> @_client = new Client
 
-  init: (_config = {}) ->
-    config = _.extend config, _config
-    return this
-
-  # Use express server instance
-  # @param {Object} app
-  # @param {Object} options
-  server: (app, options = {}) ->
-    server.initialHandler app, options
-    return this
+  # Talk service wait for the server call
+  service: (app, options = {}) -> new Service(this, app, options)
 
   client: (token) -> new Client token
 
@@ -36,4 +27,8 @@ class Talk extends EventEmitter
     @_client.call.apply @_client, arguments
     return this
 
-module.exports = new Talk
+talk = (_config = {}) ->
+  config = _.extend config, _config
+  return new Talk
+
+module.exports = talk
