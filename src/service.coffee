@@ -1,6 +1,6 @@
 express = require 'express'
 json = require('body-parser').json
-logger = require('graceful-logger').format('medium')
+logger = require('graceful-logger')
 
 class Service
 
@@ -20,7 +20,9 @@ class Service
     @talk.emit '*', data
 
   listen: (port, callback = ->) ->
-    @app.listen port, callback
+    @app.listen port, (err) ->
+      logger.info "service listen on #{port}"
+      callback err
     this
 
 module.exports = Service

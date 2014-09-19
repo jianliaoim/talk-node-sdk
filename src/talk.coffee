@@ -1,4 +1,5 @@
 {EventEmitter} = require 'events'
+logger = require('graceful-logger').format('medium')
 
 _ = require 'lodash'
 
