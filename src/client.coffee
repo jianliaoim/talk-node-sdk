@@ -23,6 +23,7 @@ class Client
   # Send request
   call: (api, params, callback = ->) ->
     # Try discover the apis first
+
     if _.isEmpty(apis)
       return async.waterfall [
         (next) =>
@@ -30,6 +31,10 @@ class Client
         (apis, next) =>
           @call api, params, next
       ], callback
+
+    if typeof params is 'function'
+      callback = params
+      params = {}
 
     return callback(new Error('NO_SUCH_API')) unless apis[api]?
 
