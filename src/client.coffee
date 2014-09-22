@@ -1,5 +1,6 @@
 _ = require 'lodash'
 async = require 'async'
+logger = require 'graceful-logger'
 
 apis = require './apis'
 util = require './util'
@@ -51,6 +52,8 @@ class Client
     # Add authorization info
     params.token = @token if @token
     params.appToken = config.appToken
+
+    logger.info "send request: #{url}"
 
     util.request url, method, params, callback
 
