@@ -16,6 +16,8 @@ class Service
     res.end 'PONG'
     return unless event
 
+    logger.info "emit event: #{event}"
+
     @talk.emit event, data
     @talk.emit '*', data
 
