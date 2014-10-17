@@ -1,35 +1,24 @@
-{EventEmitter} = require 'events'
 logger = require('graceful-logger').format('medium')
-
 _ = require 'lodash'
 
 config = require './config'
+api = require './api'
+
 Client = require './client'
-Service = require './service'
+client = new Client
 
-class Talk extends EventEmitter
+class Talk
 
-  constructor: -> @_client = new Client
+  init: (_config = {}) ->
+    config = _.extend config, _config
+    api.fetch()
+    this
 
-  # Talk service wait for the server call
-  service: (app, options = {}) -> new Service(this, app, options)
+  authClient: (token) -> new Client token
 
-  client: (token) -> new Client token
+  call: -> client.call.apply client, arguments
 
-  auth: ->
-    @_client.auth.apply @_client, arguments
-    return this
-
-  discover: ->
-    @_client.discover.apply @_client, arguments
-    return this
-
-  call: ->
-    @_client.call.apply @_client, arguments
-    return this
-
-talk = (_config = {}) ->
-  config = _.extend config, _config
-  return new Talk
+talk = new Talk
+talk.service = require './service'
 
 module.exports = talk

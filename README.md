@@ -14,7 +14,7 @@ config =
 
 token = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 
-talk.init(config).server(app).auth(token).discover()
+talk.init(config).authClient(token)
 
 # Use another client
 client = talk.client(token)
@@ -35,6 +35,10 @@ client = talk.client(token)
 # Apis
 
 # ChangeLog
+
+## 0.3.0
+- move event emitter to service
+- reconnect the api server when the discover api failed
 
 ## 0.2.0
 

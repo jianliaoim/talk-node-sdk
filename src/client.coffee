@@ -2,7 +2,7 @@ _ = require 'lodash'
 async = require 'async'
 logger = require 'graceful-logger'
 
-apis = require './apis'
+api = require './api'
 util = require './util'
 config = require './config'
 
@@ -12,49 +12,33 @@ class Client
 
   auth: (@token) -> this
 
-  # Get the supported api list
-  discover: (callback = ->) ->
-    discoverUrl = config.apiHost + '/v1/discover'
-    util.request discoverUrl, 'get', (err, data) ->
-      unless err?
-        apis = _.extend apis, data
-      callback err, data
-    return this
-
   # Send request
-  call: (api, params, callback = ->) ->
-    # Try discover the apis first
+  call: (apiKey, params, callback = ->) ->
 
-    if _.isEmpty(apis)
-      return async.waterfall [
-        (next) =>
-          @discover next
-        (apis, next) =>
-          @call api, params, next
-      ], callback
+    api.list (err, apiMap) =>
 
-    if typeof params is 'function'
-      callback = params
-      params = {}
+      if typeof params is 'function'
+        callback = params
+        params = {}
 
-    return callback(new Error('NO_SUCH_API')) unless apis[api]?
+      return callback(err or new Error('NO_SUCH_API')) unless apiMap[apiKey]?
 
-    {path, method} = apis[api]
+      {path, method} = apiMap[apiKey]
 
-    url = config.apiHost + path.split('/').map((k)->
-      return k unless k[0] is ':'
-      k = k[1..]
-      _k = params[k]
-      delete params[k]
-      return _k
-      ).join('/')
+      url = config.apiHost + path.split('/').map((k)->
+        return k unless k[0] is ':'
+        k = k[1..]
+        _k = params[k]
+        delete params[k]
+        return _k
+        ).join('/')
 
-    # Add authorization info
-    params.token = @token if @token
-    params.appToken = config.appToken
+      # Add authorization info
+      params.token = @token if @token
+      params.appToken = config.appToken
 
-    logger.info "send request: #{url}"
+      logger.info "send request: #{url}"
 
-    util.request url, method, params, callback
+      util.request url, method, params, callback
 
 module.exports = Client

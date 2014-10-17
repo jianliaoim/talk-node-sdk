@@ -1,8 +1,5 @@
 request = require 'request'
 
-config = require './config'
-apis = require './apis'
-
 exports.request = (url, method, params = {}, callback = ->) ->
 
   if toString.call(params) is '[object Function]'
@@ -35,8 +32,3 @@ exports.request = (url, method, params = {}, callback = ->) ->
       callback err
     else
       callback null, body
-
-# Call api
-exports.call = (api, params, callback = ->) ->
-  return callback(new Error('NO_SUCH_API')) unless apis[api]?
-
