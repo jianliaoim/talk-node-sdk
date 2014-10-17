@@ -15,8 +15,24 @@ predict.fakeServer = ->
   app.listen 7001
 
   app.get '/v1/discover', (req, res) ->
-    data = {"user.readOne":{"path":"/v1/users/:_id","method":"get"}, "discover.index":{"path":"/v1/discover","method":"get"}}
+    data = {
+      "discover.index": {
+        "path": "/v1/discover",
+        "method": "get"
+      },
+      "user.readOne": {
+        "path": "/v1/users/:_id",
+        "method": "get"
+      },
+      "ping": {
+        "path": "/v1/ping",
+        "method": "get"
+      }
+    }
     res.json data
+
+  app.get '/v1/ping', (req, res) ->
+    res.json 'pong'
 
   app.get '/v1/users/:_id', [auth], (req, res) ->
     res.json name: 'lurenjia'

@@ -8,15 +8,23 @@ talk = require '../src/talk'
 
 predict = require './predict'
 
-before predict.fakeServer
-
 describe 'Talk#Main', ->
+
+  describe 'retry connecting', ->
+
+    it 'should work when api server is started after the client', (done) ->
+      talk.init(predict.config)
+
+      talk.call 'ping', (err, data) ->
+        data.should.eql 'pong'
+        done err
+
+      setTimeout predict.fakeServer, 1000
 
   describe 'client and call apis', ->
 
     _userId = '53be41be138556909068769f'
     token = '5e7f8ead-47fa-4256-9a27-4e2166cfcfac'
-    talk.init(predict.config)
 
     it 'should get an NO_PERMISSIONT error without authorization', (done) ->
 
