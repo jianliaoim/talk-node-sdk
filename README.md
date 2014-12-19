@@ -1,6 +1,10 @@
 Talk-Node-Sdk
 ======
 
+[![NPM version][npm-image]][npm-url]
+[![Build Status][travis-image]][travis-url]
+[![Talk topic][talk-image]][talk-url]
+
 # Usage
 
 ```coffeescript
@@ -49,3 +53,12 @@ client = talk.client(token)
 - Use methods from `discover` api
 - Add support for 'GET', 'PUT', 'POST', 'DELETE' methods
 - Replace url params with the correct value
+
+[npm-url]: https://npmjs.org/package/talk-node-sdk
+[npm-image]: http://img.shields.io/npm/v/talk-node-sdk.svg
+
+[travis-url]: https://travis-ci.org/teambition/talk-node-sdk
+[travis-image]: http://img.shields.io/travis/teambition/talk-node-sdk.svg
+
+[talk-url]: https://guest.talk.ai/rooms/9c81ff703b
+[talk-image]: http://img.shields.io/badge/talk-node--sdk-blue.svg
