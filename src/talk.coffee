@@ -20,5 +20,6 @@ class Talk
 
 talk = new Talk
 talk.service = require './service'
+talk.Worker = require './worker'
 
 module.exports = talk

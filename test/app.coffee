@@ -1,10 +1,10 @@
-predict = module.exports
+app = module.exports
 
-predict.config =
+app.config =
   appToken: 'fa53d5a0-bfb9-11e3-9a30-337b04324e79'
   apiHost: 'http://localhost:7001'
 
-predict.fakeServer = ->
+app.fakeServer = ->
   express = require 'express'
   app = express()
 

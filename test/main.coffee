@@ -6,20 +6,20 @@ supertest = require 'supertest'
 
 talk = require '../src/talk'
 
-predict = require './predict'
+app = require './app'
 
 describe 'Talk#Main', ->
 
   describe 'retry connecting', ->
 
     it 'should work when api server is started after the client', (done) ->
-      talk.init(predict.config)
+      talk.init(app.config)
 
       talk.call 'ping', (err, data) ->
         data.should.eql 'pong'
         done err
 
-      setTimeout predict.fakeServer, 1000
+      setTimeout app.fakeServer, 1000
 
   describe 'client and call apis', ->
 
