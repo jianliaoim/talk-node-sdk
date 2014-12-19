@@ -11,10 +11,14 @@
     "test": "make test",
     "prepublish": "rm -rf lib && coffee -o lib -c src"
   },
+  "author": {
+    "name": "Teambition",
+    "url": "https://www.teambition.com"
+  },
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git@code.teambition.com:talk/talk-sdk-node.git"
+    "url": "git@github.com:teambition/talk-node-sdk.git"
   },
   "devDependencies": {
     "should": "^3.3.2",
