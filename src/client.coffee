@@ -1,4 +1,3 @@
-_ = require 'lodash'
 async = require 'async'
 logger = require 'graceful-logger'
 

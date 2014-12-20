@@ -1,4 +1,4 @@
-_ = require 'lodash'
+_util = require 'util'
 async = require 'async'
 util = require './util'
 config = require './config'
@@ -30,7 +30,7 @@ api =
     discoverUrl = config.apiHost + '/v1/discover'
     util.request discoverUrl, 'get', (err, data = {}) ->
       unless err?
-        apiMap = _.extend apiMap, data
+        apiMap = _util._extend apiMap, data
         api.ready = true
       callback err, apiMap
 

@@ -1,5 +1,5 @@
+_util = require 'util'
 logger = require('graceful-logger').format('medium')
-_ = require 'lodash'
 
 config = require './config'
 api = require './api'
@@ -10,7 +10,7 @@ client = new Client
 class Talk
 
   init: (_config = {}) ->
-    config = _.extend config, _config
+    config = _util._extend config, _config
     api.fetch()
     this
 
@@ -20,6 +20,6 @@ class Talk
 
 talk = new Talk
 talk.service = require './service'
-talk.Worker = require './worker'
+talk.worker = require './worker'
 
 module.exports = talk
