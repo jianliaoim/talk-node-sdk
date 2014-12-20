@@ -40,6 +40,9 @@ client = talk.client(token)
 
 # ChangeLog
 
+## 0.4.0
+- add worker in sdk
+
 ## 0.3.0
 - move event emitter to service
 - reconnect the api server when the discover api failed
