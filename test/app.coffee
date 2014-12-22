@@ -9,8 +9,8 @@ app.fakeServer = ->
   app = express()
 
   auth = (req, res, next) ->
-    return next() if req.query?.token
-    next new Error('NOT_LOGIN')
+    return next() if req.headers?.authorization
+    next new Error('not login')
 
   app.listen 7001
 

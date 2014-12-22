@@ -17,29 +17,26 @@ class Worker extends EventEmitter
     @removeTasks = removeTasks if typeof removeTasks is 'function'
 
   fetchTasks: ->
+    retryTimes = 0
     retryMaxTimes = 3
     retryInterval = 100
     talk = require './talk'
     self = this
 
-    Promise.reduce [retryMaxTimes..0], (integrations, current, times) ->
+    _fetchTasks = ->
+      talk.call 'integration.batchread'
+      .catch (err) ->
+        retryTimes += 1
+        retryDuration = retryInterval * 2 ** retryTimes
+        if retryTimes > retryMaxTimes
+          throw new Error('could not fetch the integration list from server')
+        Promise.delay retryDuration
+        .then _fetchTasks
 
-      return integrations if integrations
-      throw new Error('retry time out') if current is 0
-      retryTime = retryInterval * 2 ** times
-
-      Promise.delay retryTime
-      .then ->
-        Promise.promisify talk.call
-        .call talk, 'integration.batchread'
-
-    , null
-
+    _fetchTasks()
     .then (integrations = []) ->
       integrations.forEach (integration) ->
         self.emit 'integration.create', integration
-
-    .catch logger.warn
 
   bindEvents: ->
     self = this

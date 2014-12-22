@@ -1,20 +1,19 @@
 {EventEmitter} = require 'events'
-express = require 'express'
-json = require('body-parser').json
-logger = require('graceful-logger')
+{json} = require 'body-parser'
+logger = require 'graceful-logger'
 
 class Service extends EventEmitter
 
   constructor: (@app, options = {}) ->
-    @app or= express()
     {prefix} = options
     prefix or= '/'
     @app.use json()
     @app.post prefix, @_emit
 
-  _emit: (req, res, next) =>
+  _emit: (req, res) =>
     {event, data} = req.body or {}
-    res.end 'PONG'
+    res.json pong: 1
+
     return unless event
 
     logger.info "emit event: #{event}"
@@ -22,13 +21,6 @@ class Service extends EventEmitter
     @emit event, data
     @emit '*', data
 
-  listen: (port, callback = ->) ->
-    @app.listen port, (err) ->
-      logger.info "service listen on #{port}"
-      callback err
-    this
-
-service = (app, options = {}) ->
-  return new Service app, options
+service = (app, options = {}) -> new Service app, options
 
 module.exports = service

@@ -11,24 +11,32 @@ Talk-Node-Sdk
 talk = require 'talk-node-sdk'
 
 config =
-  clientId: 'xxxxxxx-eeee-11e3-9a30-337b04324e79'
-  clientSecret: 'yyyyyy-ffff-gggg-hhhh-aaaaaaaaaaa'
+  appToken: 'yyyyyy-ffff-gggg-hhhh-aaaaaaaaaaa'
   apiHost: 'http://localhost:7001'
 
-token = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+talk.init(config)
 
-talk.init(config).authClient(token)
+# Initialize a webhook reciever service
+app = require('express')()
+service = talk.service app, prefix: '/'
 
-# Use another client
+# Initialize a worker
+worker = talk.worker
+  interval: 100
+  runner: (task) ->  # Call the runner when the task executed
+
+## An 'execute' event will be emitted when a task executed
+worker.on 'execute', (task) ->
+
+## Bind the worker to the service
+worker.watch service
+
+# Initialize another client
 client = talk.client(token)
 
 ```
 
 # TODO
-
-1. `talk.register` to register for the application
-2. `talk.request` to request for the talk resource
-3. `talk.subscribe` to listen for webhooks
 
 # Events
 
@@ -41,6 +49,8 @@ client = talk.client(token)
 
 ## 0.4.0
 - add worker in sdk
+- use promise
+- remove `express` dependency
 
 ## 0.3.0
 - move event emitter to service
