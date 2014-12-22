@@ -3,6 +3,7 @@ http = require 'http'
 should = require 'should'
 express = require 'express'
 supertest = require 'supertest'
+Promise = require 'bluebird'
 
 talk = require '../src/talk'
 
@@ -70,3 +71,31 @@ describe 'Talk#Main', ->
         .set "Content-Type": "application/json"
         .send JSON.stringify(event: 'user.readOne', data: 'ok')
         .end(->)
+
+  describe 'worker and test for what he should do', (done) ->
+
+    it 'should run the tasks every 100ms', (done) ->
+
+      ticks = 0
+
+      testTask = (task) ->
+        worker.tasks.should.have.keys '2.00abc_mention', '2.00def_mention', '2.00def_repost'
+        task.should.have.properties 'token', 'notification'
+        if task.token is '2.00abc'
+          task.notification.should.eql 'mention'
+
+      worker = talk.worker
+        interval: 100  # Execute task every 100 ms
+        runner: (task) ->  # Task runner
+          new Promise (resolve, reject) ->
+            ticks += 1
+            testTask task
+            if ticks is 6  # Stop work after 2 * 3 times
+              worker.stop()
+              done()
+            resolve()
+
+      # Work on events
+      worker.on 'execute', testTask
+
+      worker.run()
