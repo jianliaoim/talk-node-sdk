@@ -35,7 +35,7 @@ describe 'Talk#Main', ->
 
     it 'should call the user.readOne with authorization', (done) ->
 
-      authClient = talk.authClient(token)
+      authClient = talk.client(token)
       authClient.call 'user.readOne', _id: _userId, (err, user) ->
         user.should.have.properties 'name'
         done err

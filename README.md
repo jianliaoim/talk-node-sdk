@@ -9,7 +9,6 @@ Talk-Node-Sdk
 
 ```coffeescript
 talk = require 'talk-node-sdk'
-app = express()
 
 config =
   clientId: 'xxxxxxx-eeee-11e3-9a30-337b04324e79'

@@ -68,11 +68,7 @@ class Worker extends EventEmitter
     Promise.each Object.keys(tasks), (key) ->
       task = tasks[key]
       self.emit 'execute', task
-      if typeof runner is 'function'
-        if runner.length is 2  # The second param is callback
-          Promise.promisify(runner) task
-        else
-          runner task
+      runner task if typeof runner is 'function'
 
   stop: -> @isStopped = true
 

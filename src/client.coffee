@@ -40,4 +40,6 @@ class Client
 
       util.request url, method, params, callback
 
-module.exports = Client
+client = (token) -> new Client token
+
+module.exports = client
