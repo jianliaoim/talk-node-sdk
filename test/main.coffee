@@ -3,6 +3,7 @@ http = require 'http'
 should = require 'should'
 express = require 'express'
 supertest = require 'supertest'
+Promise = require 'bluebird'
 
 talk = require '../src/talk'
 
@@ -10,16 +11,17 @@ app = require './app'
 
 describe 'Talk#Main', ->
 
+  talk.init(app.config)
+
   describe 'retry connecting', ->
 
     it 'should work when api server is started after the client', (done) ->
-      talk.init(app.config)
 
       talk.call 'ping', (err, data) ->
         data.should.eql 'pong'
         done err
 
-      setTimeout app.fakeServer, 1000
+      setTimeout app.fakeServer, 500
 
   describe 'client and call apis', ->
 
@@ -34,19 +36,21 @@ describe 'Talk#Main', ->
 
     it 'should call the user.readOne with authorization', (done) ->
 
-      authClient = talk.authClient(token)
+      authClient = talk.client(token)
       authClient.call 'user.readOne', _id: _userId, (err, user) ->
         user.should.have.properties 'name'
         done err
 
   describe 'service and listen for events', ->
 
-    service = talk.service()
+    exApp = express()  # Express application
+
+    service = talk.service(exApp)
 
     it 'should intialize the express server and call the api', (done) ->
 
-      supertest(service.app).post('/').end (err, res) ->
-        res.text.should.eql 'PONG'
+      supertest(exApp).post('/').end (err, res) ->
+        res.text.should.eql '{"pong":1}'
         done err
 
     it 'should listen for the user.readOne event', (done) ->
@@ -55,7 +59,7 @@ describe 'Talk#Main', ->
         data.should.eql 'ok'
         done()
 
-      supertest(service.app).post('/')
+      supertest(exApp).post('/')
         .set "Content-Type": "application/json"
         .send JSON.stringify(event: 'user.readOne', data: 'ok')
         .end(->)
@@ -66,7 +70,35 @@ describe 'Talk#Main', ->
         data.should.eql 'ok'
         done()
 
-      supertest(service.app).post '/'
+      supertest(exApp).post '/'
         .set "Content-Type": "application/json"
         .send JSON.stringify(event: 'user.readOne', data: 'ok')
         .end(->)
+
+  describe 'worker and test for what he should do', (done) ->
+
+    it 'should run the tasks every 100ms', (done) ->
+
+      ticks = 0
+
+      testTask = (task) ->
+        worker.tasks.should.have.keys '2.00abc_mention', '2.00def_mention', '2.00def_repost'
+        task.should.have.properties 'token', 'notification'
+        if task.token is '2.00abc'
+          task.notification.should.eql 'mention'
+
+      worker = talk.worker
+        interval: 100  # Execute task every 100 ms
+        runner: (task) ->  # Task runner
+          new Promise (resolve, reject) ->
+            ticks += 1
+            testTask task
+            if ticks is 6  # Stop work after 2 * 3 times
+              worker.stop()
+              done()
+            resolve()
+
+      # Work on events
+      worker.on 'execute', testTask
+
+      worker.run()

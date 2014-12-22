@@ -1,25 +1,22 @@
+_util = require 'util'
 logger = require('graceful-logger').format('medium')
-_ = require 'lodash'
 
 config = require './config'
-api = require './api'
-
-Client = require './client'
-client = new Client
 
 class Talk
 
   init: (_config = {}) ->
-    config = _.extend config, _config
-    api.fetch()
+    config = _util._extend config, _config
+
+    @client = require './client'
+    @worker = require './worker'
+    @service = require './service'
+
+    @_client = @client()  # The default client without token of user
     this
 
-  authClient: (token) -> new Client token
-
-  call: -> client.call.apply client, arguments
+  call: -> @_client.call.apply @_client, arguments
 
 talk = new Talk
-talk.service = require './service'
-talk.Worker = require './worker'
 
 module.exports = talk
