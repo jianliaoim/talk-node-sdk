@@ -37,6 +37,7 @@ client = talk.client(token)
 ```
 
 # TODO
+- reduce the workers start at the same time
 
 # Events
 
@@ -73,4 +74,4 @@ client = talk.client(token)
 [travis-image]: http://img.shields.io/travis/teambition/talk-node-sdk.svg
 
 [talk-url]: https://guest.talk.ai/rooms/9c81ff703b
-[talk-image]: http://img.shields.io/badge/talk-node--sdk-blue.svg
+[talk-image]: https://img.shields.io/talk/t/9c81ff703b.svg
