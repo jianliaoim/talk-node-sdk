@@ -1,18 +1,20 @@
-app = module.exports
+express = require 'express'
+{json} = require 'body-parser'
+
+module.exports = app = express()
 
 app.config =
   appToken: 'fa53d5a0-bfb9-11e3-9a30-337b04324e79'
   apiHost: 'http://localhost:7001'
 
 app.fakeServer = ->
-  express = require 'express'
-  app = express()
-
   auth = (req, res, next) ->
     return next() if req.headers?.authorization
     next new Error('not login')
 
   app.listen 7001
+
+  app.use json()
 
   app.get '/v1/discover', (req, res) ->
     data =
@@ -28,6 +30,9 @@ app.fakeServer = ->
       "integration.batchread":
         "path": "/v1/integrations"
         "method": "get"
+      "integration.error":
+        "path": "/v1/integrations/:_id/error"
+        "method": "post"
     res.json data
 
   app.get '/v1/ping', (req, res) ->
@@ -55,6 +60,12 @@ app.fakeServer = ->
       }
     ]
 
+  app.post '/v1/integrations/:_id/error', (req, res) ->
+    app.test req, res
+    res.json ok: 1
+
   # Error handler
   app.use (err, req, res, next) ->
     res.status(400).json code: 400, message: err.message
+
+app.test = ->

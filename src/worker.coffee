@@ -12,6 +12,7 @@ class Worker extends EventEmitter
     @options =
       interval: 300000  # 5 minutes
       concurrency: 5
+      maxErrorTimes: 3
     _util._extend @options, options
 
     {addTasks, removeTasks} = @options
@@ -62,14 +63,38 @@ class Worker extends EventEmitter
 
   runOnce: ->
     self = this
-    {runner, concurrency} = @options
+    {runner, concurrency, maxErrorTimes} = @options
     {tasks} = this
+    talk = require './talk'
     Promise.map Object.keys(tasks), (key) ->
       task = tasks[key]
       self.emit 'execute', task
       return unless typeof runner is 'function'
       promise = runner task
-      promise?.catch? logger.warn
+      return promise unless typeof promise.then is 'function'
+
+      promise
+      .then ->
+        task.errorTimes = 0
+      .catch (err) ->
+        # Handle error integration
+        logger.warn err
+        self.emit 'error', err, task
+        task.errorTimes = (task.errorTimes or 0) + 1
+        return unless task.errorTimes >= maxErrorTimes
+
+        {integrations} = task
+        _sendIntegrationError = (ikey) ->
+          integration = integrations[ikey]
+          talk.call 'integration.error',
+            _id: integration._id
+            errorInfo: err.message
+          .then ->
+            self.emit 'integration.remove', integration
+          .catch logger.warn
+
+        Object.keys(integrations).forEach _sendIntegrationError
+
     , concurrency: concurrency
 
   stop: -> @isStopped = true

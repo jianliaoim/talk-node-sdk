@@ -122,3 +122,32 @@ describe 'Talk#Main', ->
             , 20 * num
 
       worker.run()
+
+    it 'should send a error integration to server when task failed', (done) ->
+
+      worker = talk.worker
+        interval: 100
+        maxErrorTimes: 1
+        runner: (task) ->
+          new Promise (resolve, reject) ->
+            return reject(new Error('OMG, they killed kenny!')) if task.token is '2.00abc'
+            resolve()
+
+      app.test = (req, res) ->
+        req.body.should.have.properties 'appToken', 'errorInfo'
+        req.url.should.containEql '54533b3ac4cc9aa41acc3cf6'
+        app.test = ->
+        setTimeout ->
+          # Should not have the invalid task
+          worker.tasks.should.have.keys '2.00def_mention', '2.00def_repost'
+          worker.stop()
+          done()
+        , 100
+
+      worker.on 'error', (err, task) ->
+        err.message.should.eql 'OMG, they killed kenny!'
+        task.token.should.eql '2.00abc'
+
+      worker.run()
+
+
