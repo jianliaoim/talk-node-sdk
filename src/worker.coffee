@@ -62,10 +62,11 @@ class Worker extends EventEmitter
     self = this
     {runner} = @options
     {tasks} = this
-    Promise.each Object.keys(tasks), (key) ->
+    Promise.map Object.keys(tasks), (key) ->
       task = tasks[key]
       self.emit 'execute', task
-      runner task if typeof runner is 'function'
+      return unless typeof runner is 'function'
+      runner task
 
   stop: -> @isStopped = true
 

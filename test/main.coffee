@@ -75,7 +75,7 @@ describe 'Talk#Main', ->
         .send JSON.stringify(event: 'user.readOne', data: 'ok')
         .end(->)
 
-  describe 'worker and test for what he should do', (done) ->
+  describe 'worker and test for what he should do', ->
 
     it 'should run the tasks every 100ms', (done) ->
 
@@ -100,5 +100,25 @@ describe 'Talk#Main', ->
 
       # Work on events
       worker.on 'execute', testTask
+
+      worker.run()
+
+    it 'should not bother the other tasks when a task crashed', (done) ->
+
+      ticks = 0
+      worker = talk.worker
+        interval: 100
+        runner: (task) ->
+          num = ticks += 1
+          new Promise (resolve, reject) ->
+            setTimeout ->
+              # The first task will crash
+              return reject(new Error('something error')) if num is 1
+              # The second task will also work
+              if num is 2
+                worker.stop()
+                task.token.should.eql '2.00def'
+                done()
+            , 20 * num
 
       worker.run()
