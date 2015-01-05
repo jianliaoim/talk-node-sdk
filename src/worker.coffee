@@ -9,7 +9,9 @@ class Worker extends EventEmitter
     @tasks = {}
     @fetchTasks()
     @bindEvents()
-    @options = interval: 300000  # 5 minutes
+    @options =
+      interval: 300000  # 5 minutes
+      concurrency: 5
     _util._extend @options, options
 
     {addTasks, removeTasks} = @options
@@ -60,13 +62,15 @@ class Worker extends EventEmitter
 
   runOnce: ->
     self = this
-    {runner} = @options
+    {runner, concurrency} = @options
     {tasks} = this
     Promise.map Object.keys(tasks), (key) ->
       task = tasks[key]
       self.emit 'execute', task
       return unless typeof runner is 'function'
-      runner task
+      promise = runner task
+      promise?.catch? logger.warn
+    , concurrency: concurrency
 
   stop: -> @isStopped = true
 
