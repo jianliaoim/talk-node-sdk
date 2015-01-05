@@ -68,18 +68,15 @@ class Worker extends EventEmitter
     talk = require './talk'
     Promise.map Object.keys(tasks), (key) ->
       task = tasks[key]
-      self.emit 'execute', task
       return unless typeof runner is 'function'
       promise = runner task
       return promise unless typeof promise.then is 'function'
 
       promise
-      .then ->
-        task.errorTimes = 0
+      .then -> task.errorTimes = 0
       .catch (err) ->
         # Handle error integration
         logger.warn err
-        self.emit 'error', err, task
         task.errorTimes = (task.errorTimes or 0) + 1
         return unless task.errorTimes >= maxErrorTimes
 

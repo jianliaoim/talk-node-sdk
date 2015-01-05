@@ -98,9 +98,6 @@ describe 'Talk#Main', ->
               done()
             resolve()
 
-      # Work on events
-      worker.on 'execute', testTask
-
       worker.run()
 
     it 'should not bother the other tasks when a task crashed', (done) ->
@@ -143,10 +140,6 @@ describe 'Talk#Main', ->
           worker.stop()
           done()
         , 100
-
-      worker.on 'error', (err, task) ->
-        err.message.should.eql 'OMG, they killed kenny!'
-        task.token.should.eql '2.00abc'
 
       worker.run()
 
