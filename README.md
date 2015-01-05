@@ -48,6 +48,9 @@ client = talk.client(token)
 
 # ChangeLog
 
+## 0.4.1
+- execute jobs parallelly, set the default concurrency to 5
+
 ## 0.4.0
 - add worker in sdk
 - use promise
