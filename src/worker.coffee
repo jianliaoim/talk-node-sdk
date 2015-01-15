@@ -57,7 +57,7 @@ class Worker extends EventEmitter
     self = this
     @runOnce()
     .timeout interval  # Kill the current task loop when execute time greater than interval
-    .catch logger.warn
+    .catch (err) -> logger.warn err.stack
     .then -> Promise.delay interval
     .then -> self.run()
 
@@ -76,7 +76,7 @@ class Worker extends EventEmitter
       .then -> task.errorTimes = 0
       .catch (err) ->
         # Handle error integration
-        logger.warn err
+        logger.warn err.stack
         task.errorTimes = (task.errorTimes or 0) + 1
         return unless task.errorTimes >= maxErrorTimes
 
@@ -88,7 +88,7 @@ class Worker extends EventEmitter
             errorInfo: err.message
           .then ->
             self.emit 'integration.remove', integration
-          .catch logger.warn
+          .catch (err) -> logger.warn err.stack
 
         Object.keys(integrations).forEach _sendIntegrationError
 
