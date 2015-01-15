@@ -11,8 +11,8 @@ class Worker extends EventEmitter
     @bindEvents()
     @options =
       interval: 300000  # 5 minutes
-      concurrency: 5
-      maxErrorTimes: 3
+      concurrency: 2
+      maxErrorTimes: 5
     _util._extend @options, options
 
     {addTasks, removeTasks} = @options
