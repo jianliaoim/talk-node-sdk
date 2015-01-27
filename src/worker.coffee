@@ -71,7 +71,7 @@ class Worker extends EventEmitter
       task = tasks[key]
       return unless typeof runner is 'function'
       promise = runner task
-      return promise unless typeof promise.then is 'function'
+      return promise unless typeof promise?.then is 'function'
 
       promise
       .then -> task.errorTimes = 0
