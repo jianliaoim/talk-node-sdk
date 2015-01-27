@@ -1,6 +1,6 @@
 {
   "name": "talk-node-sdk",
-  "version": "0.4.5",
+  "version": "0.4.6",
   "main": "./lib/talk",
   "description": "node sdk for talk",
   "directories": {
