@@ -7,7 +7,7 @@ class Worker extends EventEmitter
 
   constructor: (options = {}) ->
     @tasks = {}
-    @fetchTasks()
+    @fetchTasksPromise = @fetchTasks()
     @bindEvents()
     @options =
       interval: 300000  # 5 minutes
@@ -55,7 +55,8 @@ class Worker extends EventEmitter
     return if @isStopped
     {interval} = @options
     self = this
-    @runOnce()
+    @fetchTasksPromise
+    .then -> self.runOnce()
     .timeout interval  # Kill the current task loop when execute time greater than interval
     .catch (err) -> logger.warn err.stack
     .then -> Promise.delay interval
