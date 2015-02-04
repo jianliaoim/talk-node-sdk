@@ -37,7 +37,7 @@ client = talk.client(token)
 ```
 
 # TODO
-- reduce the workers start at the same time
+- Use cron to execute worker
 
 # Events
 
