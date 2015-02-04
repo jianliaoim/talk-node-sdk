@@ -8,7 +8,7 @@
     "lib": "./lib"
   },
   "scripts": {
-    "test": "make test",
+    "test": "NODE_ENV=mocha ./node_modules/.bin/mocha --reporter spec test/index.js",
     "prepublish": "rm -rf lib && coffee -o lib -c src"
   },
   "author": {
