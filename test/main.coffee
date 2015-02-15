@@ -77,6 +77,8 @@ describe 'Talk#Main', ->
 
   describe 'worker and test for what he should do', ->
 
+    @timeout 3000
+
     it 'should run the tasks every 100ms', (done) ->
 
       ticks = 0
@@ -97,6 +99,23 @@ describe 'Talk#Main', ->
               worker.stop()
               done()
             resolve()
+
+      worker.run()
+
+    it 'should execute the tasks each second by cron-like schedule', (done) ->
+
+      ticks = 0
+
+      textTask = (task) ->
+        worker.tasks.should.have.keys ''
+
+      worker = talk.worker
+        cron: '* * * * * *'
+        runner: (task) ->
+          ticks += 1
+          if ticks is 6
+            worker.stop()
+            done()
 
       worker.run()
 

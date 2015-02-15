@@ -1,6 +1,7 @@
 {EventEmitter} = require 'events'
 Promise = require 'bluebird'
 logger = require 'graceful-logger'
+{CronJob} = require 'cron'
 _util = require 'util'
 
 class Worker extends EventEmitter
@@ -53,6 +54,7 @@ class Worker extends EventEmitter
 
   run: ->
     return if @isStopped
+    return @runCron() if @options.cron
     {interval} = @options
     self = this
     @fetchTasksPromise
@@ -62,7 +64,18 @@ class Worker extends EventEmitter
     .then -> Promise.delay interval
     .then -> self.run()
 
-  runOnce: ->
+  ###*
+   * Execute the tasks by cron-like schedule
+   * @return {[type]} [description]
+  ###
+  runCron: ->
+    {cron} = @options
+    @cronJob = new CronJob
+      cronTime: cron
+      onTick: @runOnce
+      start: true
+
+  runOnce: =>
     self = this
     {runner, concurrency, maxErrorTimes} = @options
     {tasks} = this
@@ -70,11 +83,13 @@ class Worker extends EventEmitter
     Promise.map Object.keys(tasks), (key) ->
       task = tasks[key]
       return unless typeof runner is 'function'
-      promise = runner task
-      return promise unless typeof promise?.then is 'function'
 
-      promise
+      Promise.resolve()
+
+      .then -> runner task
+
       .then -> task.errorTimes = 0
+
       .catch (err) ->
         # Handle error integration
         logger.warn err.stack
@@ -95,7 +110,9 @@ class Worker extends EventEmitter
 
     , concurrency: concurrency
 
-  stop: -> @isStopped = true
+  stop: ->
+    @isStopped = true
+    @cronJob?.stop()
 
   # The default handler for convert integrations to task
   addTasks: (integration) ->
