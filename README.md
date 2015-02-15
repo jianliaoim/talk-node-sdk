@@ -25,6 +25,12 @@ worker = talk.worker
   interval: 100
   runner: (task) ->  # Call the runner when the task executed
 
+# OR
+# Use the cron pattern to define the interval of ticks
+worker = talk.worker
+  cron: '* * * * * *'
+  runner: (task)->
+
 ## An 'execute' event will be emitted when a task executed
 worker.on 'execute', (task) ->
 
@@ -47,6 +53,9 @@ client = talk.client(token)
 # Apis
 
 # ChangeLog
+
+## 0.4.7
+- Use the cron pattern to define interval of ticks
 
 ## 0.4.1
 - execute jobs parallelly, set the default concurrency to 5
