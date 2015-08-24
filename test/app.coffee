@@ -16,32 +16,32 @@ app.fakeServer = ->
 
   app.use json()
 
-  app.get '/v1/discover', (req, res) ->
+  app.get '/v2/discover', (req, res) ->
     data =
       "discover.index":
-        "path": "/v1/discover",
+        "path": "/v2/discover",
         "method": "get"
       "user.readOne":
-        "path": "/v1/users/:_id",
+        "path": "/v2/users/:_id",
         "method": "get"
       "ping":
-        "path": "/v1/ping",
+        "path": "/v2/ping",
         "method": "get"
       "integration.batchread":
-        "path": "/v1/integrations"
+        "path": "/v2/integrations"
         "method": "get"
       "integration.error":
-        "path": "/v1/integrations/:_id/error"
+        "path": "/v2/integrations/:_id/error"
         "method": "post"
     res.json data
 
-  app.get '/v1/ping', (req, res) ->
+  app.get '/v2/ping', (req, res) ->
     res.json 'pong'
 
-  app.get '/v1/users/:_id', [auth], (req, res) ->
+  app.get '/v2/users/:_id', [auth], (req, res) ->
     res.json name: 'lurenjia'
 
-  app.get '/v1/integrations', (req, res) ->
+  app.get '/v2/integrations', (req, res) ->
     res.json [
       {
         "_id": "54533b3ac4cc9aa41acc3cf6",
@@ -60,7 +60,7 @@ app.fakeServer = ->
       }
     ]
 
-  app.post '/v1/integrations/:_id/error', (req, res) ->
+  app.post '/v2/integrations/:_id/error', (req, res) ->
     app.test req, res
     res.json ok: 1
 

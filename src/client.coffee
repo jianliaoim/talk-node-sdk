@@ -7,7 +7,7 @@ config = require './config'
 callDiscover = ->
   options =
     method: 'GET'
-    url: config.apiHost + '/v1/discover'
+    url: config.apiHost + '/v2/discover'
     json: true
 
   request(options)

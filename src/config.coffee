@@ -1,3 +1,3 @@
 module.exports =
   appToken: 'your application token'
-  apiHost: 'https://talk.ai'
+  apiHost: 'https://jianliao.com'
