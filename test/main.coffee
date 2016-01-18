@@ -7,6 +7,8 @@ Promise = require 'bluebird'
 
 talk = require '../src/talk'
 
+logger = require('graceful-logger').mute()
+
 app = require './app'
 
 describe 'Talk#Main', ->
@@ -85,9 +87,9 @@ describe 'Talk#Main', ->
 
       testTask = (task) ->
         worker.tasks.should.have.keys '2.00abc_mention', '2.00def_mention', '2.00def_repost'
-        task.should.have.properties 'token', 'notification'
+        task.should.have.properties 'token', 'event'
         if task.token is '2.00abc'
-          task.notification.should.eql 'mention'
+          task.event.should.eql 'mention'
 
       worker = talk.worker
         interval: 100  # Execute task every 100 ms
@@ -111,6 +113,7 @@ describe 'Talk#Main', ->
 
       worker = talk.worker
         cron: '* * * * * *'
+        taskInterval: 0
         runner: (task) ->
           ticks += 1
           if ticks is 6

@@ -46,17 +46,12 @@ app.fakeServer = ->
       {
         "_id": "54533b3ac4cc9aa41acc3cf6",
         "token": "2.00abc",
-        "notifications": {
-          "mention": 1
-        }
+        "events": ["mention"]
       },
       {
         "_id": "545334bdc4cc9aa41acc3ce7",
         "token": "2.00def",
-        "notifications": {
-          "mention": 1,
-          "repost": 1
-        }
+        "events": ['mention', 'repost']
       }
     ]
 

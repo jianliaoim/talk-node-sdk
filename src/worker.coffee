@@ -14,6 +14,7 @@ class Worker extends EventEmitter
       interval: 300000  # 5 minutes
       concurrency: 2
       maxErrorTimes: 10
+      taskInterval: 1000  # Sleep between each task
     _util._extend @options, options
 
     {addTasks, removeTasks} = @options
@@ -77,7 +78,7 @@ class Worker extends EventEmitter
 
   runOnce: =>
     self = this
-    {runner, concurrency, maxErrorTimes} = @options
+    {runner, concurrency, maxErrorTimes, taskInterval} = @options
     {tasks} = this
     talk = require './talk'
     Promise.map Object.keys(tasks), (key) ->
@@ -108,6 +109,8 @@ class Worker extends EventEmitter
 
         Object.keys(integrations).forEach _sendIntegrationError
 
+      .delay taskInterval
+
     , concurrency: concurrency
 
   stop: ->
@@ -116,15 +119,15 @@ class Worker extends EventEmitter
 
   # The default handler for convert integrations to task
   addTasks: (integration) ->
-    {token, notifications, url} = integration
+    {token, events, url} = integration
     {tasks} = this
-    # Integration based on token and notifications. e.g. weibo/firim
-    # These integration requests are made by a pair of token and notification event
-    if token and notifications
-      Object.keys(notifications).forEach (notification) ->
-        taskKey = "#{token}_#{notification}"
+    # Integration based on token and events. e.g. weibo/firim
+    # These integration requests are made by a pair of token and event
+    if token and events?.length
+      events.forEach (event) ->
+        taskKey = "#{token}_#{event}"
         tasks[taskKey] or=
-          notification: notification
+          event: event
           token: token
           integrations: {}
         tasks[taskKey].integrations[integration._id] = integration
