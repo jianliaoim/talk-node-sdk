@@ -83,7 +83,9 @@ class Worker extends EventEmitter
     talk = require './talk'
     Promise.map Object.keys(tasks), (key) ->
       task = tasks[key]
-      return unless typeof runner is 'function'
+      unless task and typeof(runner) is 'function'
+        delete tasks[key]
+        return false
 
       Promise.resolve()
 
