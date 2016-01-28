@@ -3,7 +3,6 @@ Talk-Node-Sdk
 
 [![NPM version][npm-image]][npm-url]
 [![Build Status][travis-image]][travis-url]
-[![Talk topic][talk-image]][talk-url]
 
 # Usage
 
@@ -82,8 +81,5 @@ client = talk.client(token)
 [npm-url]: https://npmjs.org/package/talk-node-sdk
 [npm-image]: http://img.shields.io/npm/v/talk-node-sdk.svg
 
-[travis-url]: https://travis-ci.org/teambition/talk-node-sdk
-[travis-image]: http://img.shields.io/travis/teambition/talk-node-sdk.svg
-
-[talk-url]: https://guest.talk.ai/rooms/9c81ff703b
-[talk-image]: https://img.shields.io/talk/t/9c81ff703b.svg
+[travis-url]: https://travis-ci.org/jianliaoim/talk-node-sdk
+[travis-image]: http://img.shields.io/travis/jianliaoim/talk-node-sdk.svg
